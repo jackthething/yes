@@ -1,0 +1,88 @@
+-- stfu i dont have to use grammar niggers
+-- time to destroy nova hotels
+
+local replaceWords = {
+    ["i"] = "I",
+    ["thats"] = "that's",
+    ["im"] = "I am",
+    ["ive"] = "I've",
+    ["dont"] = "don't",
+    ["doesnt"] = "doesn't",
+    ["cant"] = "can't",
+    ["youre"] = "you're",
+    ["ur"] = "your",
+    ["u"] = "you",
+    ["its"] = "it's",
+    ["oh"] = "oh,",
+    ["thnks"] = "thanks",
+    ["thx"] = "thanks",
+    ["git"] = "get",
+    ["gud"] = "good",
+    ["gramer"] = "grammar",
+    ["grammer"] = "grammar",
+    ["anymor"] = "anymore",
+
+
+
+}
+
+local questionmarks = { -- words to add question marks to
+    "mean",
+    "ask",
+    "you",
+    "care",
+    "script",
+    "is",
+    "what"
+}
+oldnc = hookmetamethod(game,"__namecall",function(...)
+    local method = getnamecallmethod()
+    local args = {...}
+    if method == "FireServer" and tostring(args[1]) == "SayMessageRequest" then
+        local a = string.sub(args[2],1,1)
+        local oldstring = string.sub(args[2],2)
+        oldstring = a:upper()..oldstring
+        args[2] = oldstring
+        local new = string.split(args[2]," ")
+        for i, v in pairs(new) do
+            pcall(function() -- pcall so roblox doesnt cry
+            local v = v:lower()
+            if replaceWords[v] then
+                if new[i] == new[1] then
+                    local word = replaceWords[v]
+                    local a = string.sub(word,1,1)
+                    local old = string.sub(word,2)
+                    
+                    new[i] = a:upper()..old
+                    else
+                    new[i] = replaceWords[v]
+                end
+            end
+        end)
+        end
+
+        local string = ""
+        for i, v in pairs(new) do
+            if new[i] == new[1] then
+                string = string..v
+                else
+                string = string.." "..v
+            end
+            
+        end
+        local last = string.sub(string,string.len(string),string.len(string)) 
+        if last == "!" or last == "." or last == "?" then
+            args[2] = string
+            else
+            if table.find(questionmarks,new[#new]:lower()) then
+            args[2] = string.."?"
+            else
+            args[2] = string.."."
+            end
+        end
+        
+        
+        return oldnc(unpack(args))
+    end
+    return oldnc(...)
+end)
