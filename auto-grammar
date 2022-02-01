@@ -2,6 +2,7 @@
 -- time to destroy nova hotels
 
 local replaceWords = {
+    ["whats"] = "what's",
     ["i"] = "I",
     ["thats"] = "that's",
     ["im"] = "I am",
