@@ -1,0 +1,61 @@
+while true do task.wait(1)
+    local function onPlayerClick(player)
+    local gun
+    for _, v in pairs(game:GetService("Players"):GetDescendants()) do
+        if v:IsA("RemoteEvent") and v.Name == "InflictTarget" then
+            gun = v
+            break
+        end
+    end
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("RemoteEvent") and v.Name == "InflictTarget" then
+            gun = v
+            break
+        end
+    end
+    if gun and player.Character and player.Character.Humanoid and player.Character.HumanoidRootPart then
+        local args = {
+            [1] = player.Character.Humanoid,
+            [2] = player.Character.HumanoidRootPart,
+            [3] = math.huge^math.huge,
+            [4] = Vector3.new(0, 0, 0),
+            [5] = 2,
+            [6] = 0,
+            [7] = false
+        }
+        gun:FireServer(unpack(args))
+    end
+end
+
+local function onPlayerJoin(player)
+    if player.Character then
+        local clickDetector = player.Character:FindFirstChild("ClickDetector")
+        if not clickDetector then
+            clickDetector = Instance.new("ClickDetector")
+            clickDetector.Parent = player.Character
+            clickDetector.MouseClick:Connect(function()
+                onPlayerClick(player)
+            end)
+        end
+    else
+        player.CharacterAdded:Connect(function(character)
+            local clickDetector = character:FindFirstChild("ClickDetector")
+            if not clickDetector then
+                clickDetector = Instance.new("ClickDetector")
+                clickDetector.Parent = character
+                clickDetector.MouseClick:Connect(function()
+                    onPlayerClick(player)
+                end)
+            end
+        end)
+    end
+end
+
+local players = game:GetService("Players"):GetPlayers()
+for _, player in pairs(players) do
+    onPlayerJoin(player)
+end
+
+game:GetService("Players").PlayerAdded:Connect(onPlayerJoin)
+
+end
